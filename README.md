@@ -1,29 +1,3 @@
-# the-f2e-w1-pomodoro
+# 六角精神時光屋 - week1 - Pomodoro 番茄鐘
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 使用[設計稿](https://xd.adobe.com/spec/4f6eb081-4411-4b48-69ae-34b92df3f3e4-395f/)
