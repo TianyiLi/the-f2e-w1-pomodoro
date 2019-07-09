@@ -1,81 +1,78 @@
 <template>
   <div id="app">
-    <div class="search">
-      ADD A NEW MISSION...
-      <svg class="add" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-    </div>
-
-    <div class="current-todo">THE FIRST THING TO DO TODAY</div>
-
-    <div class="count-down-display">25:00</div>
-
-    <ul class="todo-list">
-      <li>THE SECOND THING TO DO TODAY <PlayerButton class="player-btn"></PlayerButton></li>
-      <li>THE THIRD THING TO DO TODAY <PlayerButton class="player-btn"></PlayerButton></li>
-      <li>THE FORTH THING TO DO TODAY <PlayerButton class="player-btn"></PlayerButton></li>
-      <div class="corner">MORE</div>
-    </ul>
-
-    <List class="todo-list"></List>
-    <InsertChart class="analytics"></InsertChart>
-    <Music class="ringtones"></Music>
+    <Main></Main>
+    <ControlPanel v-if="controlIsShow"></ControlPanel>
     <div class="pomodoro">POMODORO</div>
-    <PlayTrigger class="middle-player" :pause="true" :initSec="30"></PlayTrigger>
   </div>
 </template>
-
 <script>
-import PlayTrigger from './components/Player-spinner'
-import PlayerButton from './components/svg/player-button'
-import Music from './components/svg/library-music'
-import InsertChart from './components/svg/insert-chart'
-import List from './components/svg/list'
+import Main from './wrap/Main'
+import ControlPanel from './wrap/Control-Panel'
+import { mapGetters } from 'vuex'
 export default {
   name: 'app',
   components: {
-    PlayTrigger,
-    PlayerButton,
-    Music,
-    InsertChart,
-    List
+    Main,
+    ControlPanel
+  },
+  computed: {
+    ...mapGetters([
+      'controlIsShow'
+    ])
   }
 }
 </script>
 <style lang="stylus">
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap')
-$lightPink = #FFEDF7
-$deepBlue = #003164
-$lightBlue = #E5F3FF
-$deepPink = #FF4384
+@import './main.styl'
 html, body
-  width 100%
-  height 100%
+  size 100%
   margin 0
   padding 0
   display flex
   align-items center
   justify-content center
   background rgba(black, 0.5)
+.bg-deepBlue
+  background $deepBlue
+.bg-deepPink
+  background $deepPink
+.bg-lightPink
+  background $lightPink
+.bg-lighBlue
+  background $lightBlue
+.fc-deepBlue
+  color $deepBlue
+  & svg
+    fill $deepBlue
+.fc-deepPink
+  color $deepPink
+  & svg
+    fill $deepPink
+.fc-lightPink
+  color $lightPink
+  & svg
+    fill $lightPink
+.fc-lightBlue
+  color $lightBlue
+  & svg
+    fill $lightBlue
 #app
   position relative
   flex-shrink 0
   font-family 'Roboto', 'Avenir', Helvetica, Arial, sans-serif
-  width 1280px
-  height 800px
+  size 1280px 800px
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   text-align center
   background linear-gradient(to right, $lightPink 64%, $deepBlue 64%)
-
-.search
+.add-new-mission
   position absolute
   top 48px
   left 85px
-  width 445px
-  height 56px
+  size 445px 56px
   background white
   border-radius 3px
-  font-family 'Roboto', serif
   font-style italic
   font-size 16px
   line-height 19px
@@ -88,8 +85,7 @@ html, body
   box-sizing border-box
   padding-left 16px
   .add
-    width 24px
-    height 24px
+    size 24px
     position absolute
     right 16px
     top 16px
@@ -110,8 +106,7 @@ html, body
     content ''
     left -64px
     top 0
-    height 48px
-    width 48px
+    size 48px
     border-radius 50%
     box-sizing border-box
     border solid 2px $deepBlue
@@ -120,8 +115,7 @@ html, body
     content ''
     bottom 0px
     left 0
-    height 12px
-    width 12px
+    size 12px
     border-radius 50%
     box-sizing border-box
     border solid 1px $deepPink
@@ -169,7 +163,7 @@ html, body
       left -28px
       bottom 0
       width 445px
-      height 1px
+      height 2px
       background rgba($deepBlue, 0.2)
     .player-btn
       float right
@@ -181,13 +175,13 @@ html, body
     font-size 16px
     font-weight bold
     right 0
-.todo-list, .analytics, .ringtones
+.menu-todo, .analytics, .ringtones
   fill white
-  width 36px
-  height 36px
+  size 36px
   position absolute
   left 1159px
-.todo-list
+  cursor pointer
+.menu-todo
   top 48px
 .analytics
   top 132px

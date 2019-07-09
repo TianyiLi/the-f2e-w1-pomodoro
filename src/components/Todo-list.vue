@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="search">
+  <div>
+    <div class="add-new-mission">
       ADD A NEW MISSION...
       <svg class="add"
         xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@
         <li v-for="(ele) in doneList" :key="ele.id">
           <CheckedCircle></CheckedCircle>
           {{ele.text}}
-
+          <span class="ball" v-for="n in ele.costTime" :key="n"></span>
         </li>
       </ul>
     </div>
@@ -81,7 +81,27 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~@/main.styl'
 .done
   .done-list
     text-decoration-line line-through
+.add-new-mission
+  left 560px
+.todo
+  display inline-block
+.todo-header
+  text-align left
+  size 445px 44px
+  position absolute
+  left 560px
+  top 152px
+  box-sizing border-box
+  padding 8px 16px
+  background rgba(white, 0.2)
+  svg[class^="arrow"]
+    float right
+  color white
+  font-size 24px
+  font-weight bold
+
 </style>

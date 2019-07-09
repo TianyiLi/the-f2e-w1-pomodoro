@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import constant from './constant'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    controlIsShow: false,
+    category: constant.TODO_LIST,
     todoList: [
       {
         text: 'the First thing to do today',
@@ -70,16 +73,24 @@ export default new Vuex.Store({
   },
   getters: {
     todoList: state => state.todoList.filter(list => !list.isDone),
-    doneList: state => state.todoList.filter(list => list.isDone)
+    doneList: state => state.todoList.filter(list => list.isDone),
+    controlIsShow: state => state.controlIsShow
   },
   mutations: {
     isFinish (state, i) {
       state.todoList[i].isDone = true
+    },
+    showControl (state, { isShow, category }) {
+      state.controlIsShow = isShow
+      state.category = category
     }
   },
   actions: {
     moveToDone ({ commit }, i) {
       commit('isFinish', i)
+    },
+    showControl ({ commit }, v) {
+      commit('showControl', v)
     }
   }
 })
