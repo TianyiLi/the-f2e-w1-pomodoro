@@ -16,9 +16,9 @@
       <div class="corner">MORE</div>
     </ul>
 
-    <List class="menu"></List>
-    <InsertChart class="chart"></InsertChart>
-    <Music class="music"></Music>
+    <List class="todo-list"></List>
+    <InsertChart class="analytics"></InsertChart>
+    <Music class="ringtones"></Music>
     <div class="pomodoro">POMODORO</div>
     <PlayTrigger class="middle-player" :pause="true" :initSec="30"></PlayTrigger>
   </div>
@@ -181,17 +181,17 @@ html, body
     font-size 16px
     font-weight bold
     right 0
-.menu, .chart, .music
+.todo-list, .analytics, .ringtones
   fill white
   width 36px
   height 36px
   position absolute
   left 1159px
-.menu
+.todo-list
   top 48px
-.chart
+.analytics
   top 132px
-.music
+.ringtones
   top 216px
 .pomodoro
   position absolute
