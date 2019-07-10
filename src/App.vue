@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Main></Main>
-    <ControlPanel v-if="controlIsShow"></ControlPanel>
+    <transition name="fade">
+      <ControlPanel v-if="controlIsShow"></ControlPanel>
+    </transition>
     <div class="pomodoro">POMODORO</div>
   </div>
 </template>
@@ -200,4 +202,10 @@ html, body
   position absolute
   top 130px
   left 560px
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to  {
+  opacity: 0;
+}
 </style>

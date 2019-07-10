@@ -10,61 +10,61 @@ export default new Vuex.Store({
     category: constant.TODO_LIST,
     todoList: [
       {
-        text: 'the First thing to do today',
+        text: 'THE FIRST THING TO DO TODAY',
         id: 0,
         isDone: false,
         costTime: 0
       },
       {
-        text: 'the second thing to do today',
+        text: 'THE SECOND THING TO DO TODAY',
         id: 1,
         isDone: false,
         costTime: 0
       },
       {
-        text: 'the third thing to do today',
+        text: 'THE THIRD THING TO DO TODAY',
         id: 2,
         isDone: false,
         costTime: 0
       },
       {
-        text: 'the Forth thing to do today',
+        text: 'THE FORTH THING TO DO TODAY',
         id: 3,
         isDone: false,
         costTime: 0
       },
       {
-        text: 'complete the keynote',
+        text: 'COMPLETE THE KEYNOTE',
         id: 4,
         isDone: false,
         costTime: 0
       },
       {
-        text: 'prepare presentation',
+        text: 'PREPARE PRESENTATION',
         id: 5,
         isDone: false,
         costTime: 0
       },
       {
-        text: 'mockup of the new case',
+        text: 'MOCKUP OF THE NEW CASE',
         id: 6,
         isDone: true,
         costTime: 4
       },
       {
-        text: 'product prototype',
+        text: 'PRODUCT PROTOTYPE',
         id: 7,
         isDone: true,
         costTime: 2
       },
       {
-        text: 'draw a wireframe',
+        text: 'DRAW A WIREFRAME',
         id: 8,
         isDone: true,
         costTime: 7
       },
       {
-        text: 'website detail refine',
+        text: 'WEBSITE DETAIL REFINE',
         id: 9,
         isDone: true,
         costTime: 5
