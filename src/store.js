@@ -8,12 +8,15 @@ export default new Vuex.Store({
   state: {
     controlIsShow: false,
     category: constant.TODO_LIST,
+    isCountDown: false,
+    currentCountDownTime: 25 * 60,
+    initCountDownTime: 25 * 60,
     todoList: [
       {
         text: 'THE FIRST THING TO DO TODAY',
         id: 0,
         isDone: false,
-        costTime: 0
+        costTime: 3
       },
       {
         text: 'THE SECOND THING TO DO TODAY',
@@ -69,12 +72,18 @@ export default new Vuex.Store({
         isDone: true,
         costTime: 5
       }
-    ]
+    ],
+    currentTarget: 0,
+    isRest: false
   },
   getters: {
     todoList: state => state.todoList.filter(list => !list.isDone),
     doneList: state => state.todoList.filter(list => list.isDone),
-    controlIsShow: state => state.controlIsShow
+    controlIsShow: state => state.controlIsShow,
+    isRest: state => state.isRest,
+    currentCountDownTime: state => state.currentCountDownTime,
+    currentTODO: state => state.todoList.find(ele => ele.id === state.currentTarget),
+    isCountDown: state => state.isCountDown
   },
   mutations: {
     isFinish (state, i) {
@@ -83,6 +92,28 @@ export default new Vuex.Store({
     showControl (state, { isShow, category }) {
       state.controlIsShow = isShow
       state.category = category
+    },
+    currentTargetTimeAdded (state) {
+      state.todoList.find(tl => tl.id === state.currentTarget).costTime += 1
+    },
+    setCurrentTarget (state, id) {
+      state.currentTarget = id
+    },
+    setRest (state, v) {
+      state.isRest = v
+    },
+    countDownTime (state) {
+      if (state.currentCountDownTime - 1 === 0) {
+        !state.isRest && (state.todoList.find(tl => tl.id === state.currentTarget).costTime += 1)
+        state.isRest = !state.isRest
+        state.currentCountDownTime = state.isRest ? 5 * 60 : 25 * 60
+        state.initCountDownTime = state.isRest ? 5 * 60 : 25 * 60
+      } else {
+        state.currentCountDownTime -= 1
+      }
+    },
+    countDownToggle (state, v = !state.isCountDown) {
+      state.isCountDown = v
     }
   },
   actions: {
@@ -91,6 +122,18 @@ export default new Vuex.Store({
     },
     showControl ({ commit }, v) {
       commit('showControl', v)
+    },
+    currentTargetCostTimeAdded ({ commit }) {
+      commit('currentTargetTimeAdded')
+    },
+    setCurrentTarget ({ commit }, id) {
+      commit('setCurrentTarget', id)
+    },
+    resetToggle ({ commit, state }, v) {
+      commit('setRest', v instanceof Boolean ? v : !state.isRest)
+    },
+    timeCountDown ({ commit }) {
+      commit('countDownTime')
     }
   }
 })

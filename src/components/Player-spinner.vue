@@ -1,9 +1,6 @@
 <template>
   <div class="countdownContainer"
-    :class="{pause: pause}">
-    <div class="inner-circle">
-      <PlayerButtonFill class="p-btn"></PlayerButtonFill>
-    </div>
+    :class="{active: active, rest: isRest}">
     <svg id="svg"
       width="540"
       height="540"
@@ -11,6 +8,7 @@
       version="1.1"
       xmlns="http://www.w3.org/2000/svg">
       <circle :r="baseRadius"
+        class="svg-outer-circle"
         :cx="arcX"
         :cy="arcY"
         fill="transparent"
@@ -24,14 +22,26 @@
         :stroke-width="arcStrokeWidth"
         :stroke-dasharray="arcStrokeDasharray"></circle>
     </svg>
+    <div class="inner-circle"
+      @click="playerOnClick">
+      <PlayerButtonFill v-if="!active"
+        class="p-btn"></PlayerButtonFill>
+      <PausedButtonFill v-else
+        class="p-btn"></PausedButtonFill>
+      <div class="block"></div>
+    </div>
+    <div class="sq-block"></div>
   </div>
 </template>
 
 <script>
 import PlayerButtonFill from './svg/player-button-fill'
+import PausedButtonFill from './svg/pause-button-filled'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
-    PlayerButtonFill
+    PlayerButtonFill,
+    PausedButtonFill
   },
   created () {
     let data = { width: 540, height: 540 }
@@ -40,7 +50,7 @@ export default {
     this.baseRadius = this.arcX - 2
     this.baseStrokeWidth = 4
     this.arcRadius = this.baseRadius - 7
-    this.arcStrokeWidth = 12
+    this.arcStrokeWidth = 14
     this.arcStrokeDasharray = Math.PI * this.arcRadius * 2
   },
   data () {
@@ -52,14 +62,34 @@ export default {
       arcRadius: 0,
       arcStrokeWidth: 0,
       arcStrokeDashway: 0,
-      second: this.initSec,
-      counterTimer: -1
+      counterTimer: -1,
+      active: false,
+      timerId: -1
     }
   },
-  props: ['pause', 'initSec'],
   computed: {
     strokeDashOffSet () {
-      return Math.PI * (this.arcRadius * 2) * (1 - (this.second / this.initSec))
+      return Math.PI * (this.arcRadius * 2) * (1 - (this.$store.state.currentCountDownTime / this.$store.state.initCountDownTime))
+    },
+    ...mapGetters([
+      'isRest'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'timeCountDown'
+    ]),
+    playerOnClick () {
+      this.active = !this.active
+      this.$store.commit('countDownToggle', this.active)
+      if (this.active) {
+        this.timerId = setInterval(() => {
+          if (this.active) this.timeCountDown()
+          else clearInterval(this.timerId)
+        }, 1000)
+      } else {
+        clearInterval(this.timerId)
+      }
     }
   }
 }
@@ -69,18 +99,46 @@ $lightPink = #FFEDF7
 $deepBlue = #003164
 $lightBlue = #E5F3FF
 $deepPink = #FF4384
+$normalBlue = #00A7FF
 .countdownContainer
   display flex
   justify-content center
   align-items center
-  border-radius: 50%;
+  border-radius 50%
   height 540px
   width 540px
-.countdownContainer svg circle
-  stroke-dashoffset 0
-  transition stroke-dashoffset 0.2s linear
-  stroke $deepPink
-  opacity 0.75
+  &.active
+    .inner-circle
+      background-color white
+      border solid 5px $deepPink
+      box-sizing border-box
+      .p-btn
+        fill $deepPink
+      .block
+        background-color $deepPink
+    svg .arc
+      stroke $deepPink
+  &.rest.active
+    .inner-circle
+      background-color white
+      border-color $normalBlue
+    .p-btn
+      fill $normalBlue
+    .block
+      background-color $normalBlue
+    svg .arc
+      stroke $normalBlue
+  &.rest
+    .inner-circle
+      background-color $normalBlue
+    .svg-outer-circle
+      stroke $normalBlue
+.countdownContainer svg
+  transform rotate(-90deg)
+  circle
+    stroke-dashoffset 0
+    transition stroke-dashoffset 0.2s linear
+    stroke $deepPink
 .countdownContainer svg .arc
   stroke none
 .inner-circle
@@ -88,7 +146,7 @@ $deepPink = #FF4384
   width 510px
   height 510px
   border-radius 50%
-  background $deepPink
+  background-color $deepPink
   .p-btn
     position absolute
     top 50%
@@ -97,4 +155,16 @@ $deepPink = #FF4384
     fill white
     width 96px
     height 96px
+    cursor pointer
+    transition all 0.3s
+    &:hover
+      width 110px
+      height 110px
+  .block
+    width 14px
+    height 14px
+    background-color white
+    position absolute
+    left 300px
+    top 276px
 </style>

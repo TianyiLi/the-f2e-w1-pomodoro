@@ -29,7 +29,7 @@
       <div class="first-todo-ele">THE FIRST THING TO DO TODAY</div>
     </div>
     <transition name="fade" mode="out-in">
-      <components :is="'TODO'"></components>
+      <components :is="active"></components>
     </transition>
   </div>
 </template>
@@ -38,6 +38,7 @@ import List from '../components/svg/list'
 import Music from '../components/svg/library-music'
 import InsertChart from '../components/svg/insert-chart'
 import TODO from '../components/Todo-list'
+import Analytics from '../components/Analytics'
 import Close from '../components/svg/close'
 import PlayArrow from '../components/svg/play-arrow'
 import { mapActions } from 'vuex'
@@ -47,6 +48,7 @@ export default {
     Music,
     InsertChart,
     TODO,
+    Analytics,
     PlayArrow,
     Close
   },

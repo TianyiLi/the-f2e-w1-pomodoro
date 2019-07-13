@@ -1,10 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app"
+    :class="isRest && 'rest'">
     <Main></Main>
     <transition name="fade">
       <ControlPanel v-if="controlIsShow"></ControlPanel>
     </transition>
-    <div class="pomodoro">POMODORO</div>
+    <div class="pomodoro"
+      @click="changeColor">POMODORO</div>
   </div>
 </template>
 <script>
@@ -19,8 +21,14 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'controlIsShow'
+      'controlIsShow',
+      'isRest'
     ])
+  },
+  methods: {
+    changeColor () {
+      this.$store.dispatch('resetToggle')
+    }
   }
 }
 </script>
@@ -68,6 +76,24 @@ html, body
   -moz-osx-font-smoothing grayscale
   text-align center
   background linear-gradient(to right, $lightPink 64%, $deepBlue 64%)
+  &.rest
+    background linear-gradient(to right, $lightBlue 64%, $deepBlue 64%)
+  .wrap.rest
+    .add-new-mission
+      color $normalBlue
+      .add
+        fill $deepBlue
+    .current-todo
+      .cost-time .ball
+        border-color $deepBlue
+        &.working
+          background-color $deepBlue
+        &.fill
+          background-color $deepBlue
+    .count-down-display
+      color $deepBlue
+    .corner
+      color $normalBlue
 .add-new-mission
   position absolute
   top 48px
@@ -86,13 +112,36 @@ html, body
   font-weight bold
   box-sizing border-box
   padding-left 16px
+  .label
+    transition 0.2s
+  input[type='text']
+    border none
+    position absolute
+    background-color transparent
+    color inherit
+    font-style inherit
+    font-weight inherit
+    width 70%
+    box-shadow unset
+  input[type='text']:focus ~ .label
+    transform translate(0, -100%)
+    font-size 0.7em
+    transform-origin left top
+    opacity 0.6
+  input[type='text']:valid ~ .label
+    display none
   .add
     size 24px
     position absolute
     right 16px
     top 16px
     fill $deepPink
-
+    cursor pointer
+    transition 0.2s
+    &:hover
+      filter drop-shadow(2px 2px 2px black)
+    &:active
+      filter none
 .current-todo
   font-family 'Roboto', serif
   font-size 24px
@@ -112,15 +161,31 @@ html, body
     border-radius 50%
     box-sizing border-box
     border solid 2px $deepBlue
-  &:after
+    transform-origin center
+  &.on-count-down:before
+    animation breath 1s infinite alternate
+    @keyframes breath
+      0%
+        transform scale(1)
+      100%
+        transform scale(1.3)
+  .cost-time
     position absolute
     content ''
     bottom 0px
     left 0
-    size 12px
-    border-radius 50%
-    box-sizing border-box
-    border solid 1px $deepPink
+    display flex
+    justify-content center
+    align-items center
+    .ball
+      size 12px
+      border-radius 50%
+      box-sizing border-box
+      border solid 1px $deepPink
+      flex 0 0 auto
+      margin-right 4px
+      &.fill
+        background-color $deepPink
 .count-down-display
   position absolute
   left 80px
@@ -192,6 +257,7 @@ html, body
 .pomodoro
   position absolute
   top 587px
+  cursor pointer
   right 85px
   transform rotate(90deg)
   transform-origin right top
@@ -202,10 +268,24 @@ html, body
   position absolute
   top 130px
   left 560px
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to  {
-  opacity: 0;
-}
+.fade-enter-active, .fade-leave-active
+  transition opacity 0.3s
+.fade-enter, .fade-leave-to
+  opacity 0
+[class$="-header"]
+  cursor pointer
+  text-align left
+  size 445px 44px
+  position absolute
+  left 560px
+  top 152px
+  box-sizing border-box
+  padding 8px 16px
+  background rgba(white, 0.2)
+  svg[class^="arrow"]
+    float right
+    fill white
+  color white
+  font-size 24px
+  font-weight bold
 </style>

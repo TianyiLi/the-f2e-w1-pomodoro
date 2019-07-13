@@ -1,7 +1,9 @@
 <template>
-  <div class="wrap">
+  <div class="wrap"
+    :class="isRest && 'rest' || ''">
     <div class="add-new-mission">
-      ADD A NEW MISSION...
+      <input type="text" required>
+      <span class="label">ADD A NEW MISSION...</span>
       <svg class="add"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -12,9 +14,13 @@
           fill="none" /></svg>
     </div>
 
-    <div class="current-todo">THE FIRST THING TO DO TODAY</div>
+    <div class="current-todo" :class="isCountDown && 'on-count-down'">THE FIRST THING TO DO TODAY
+      <div class="cost-time">
+        <div class="ball" :class="num <= currentTODO.costTime && 'fill'" v-for="num in currentTODO.costTime + 1" :key="num"></div>
+      </div>
+    </div>
 
-    <div class="count-down-display">25:00</div>
+    <div class="count-down-display">{{currentCountDownTime|timeF}}</div>
 
     <ul class="todo-list">
       <li>THE SECOND THING TO DO TODAY <PlayerButton class="player-btn"></PlayerButton>
@@ -41,7 +47,7 @@ import PlayerButton from '../components/svg/player-button'
 import Music from '../components/svg/library-music'
 import InsertChart from '../components/svg/insert-chart'
 import List from '../components/svg/list'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import constant from '../constant'
 export default {
   components: {
@@ -50,6 +56,14 @@ export default {
     Music,
     InsertChart,
     List
+  },
+  computed: {
+    ...mapGetters([
+      'isRest',
+      'currentCountDownTime',
+      'currentTODO',
+      'isCountDown'
+    ])
   },
   methods: {
     ...mapActions([
@@ -63,6 +77,13 @@ export default {
     },
     toRingtones () {
       return this.showControl({ isShow: true, category: constant.RINGTONES })
+    }
+  },
+  filters: {
+    timeF (value = 0) {
+      let mins = (Math.floor(value / 60)) + ''
+      let secs = (value % 60) + ''
+      return mins.padStart(2, '0') + ':' + secs.padStart(2, '0')
     }
   }
 }
