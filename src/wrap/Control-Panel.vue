@@ -1,35 +1,38 @@
 <template>
   <div class="wrap bg-deepBlue">
     <div class="option-todo"
-      @click="active = 'TODO'"
-      :class="active === 'TODO' && 'fc-deepPink' || 'in-active'">
+      @click="showControl({isShow: true, category: 'TODO'})"
+      :class="category === 'TODO' && 'fc-deepPink' || 'in-active'">
       <List></List>
       TODO-LIST
     </div>
     <div class="option-analytics"
-      @click="active = 'Analytics'"
-      :class="active === 'Analytics' && 'fc-deepPink' || 'in-active'">
+      @click="showControl({isShow: true, category: 'Analytics'})"
+      :class="category === 'Analytics' && 'fc-deepPink' || 'in-active'">
       <insert-chart></insert-chart>
       ANALYTICS
     </div>
     <div class="option-ringtones"
-      @click="active = 'Ringtones'"
-      :class="active === 'Ringtones' && 'fc-deepPink' || 'in-active'">
+      @click="showControl({isShow: true, category: 'Ringtones'})"
+      :class="category === 'Ringtones' && 'fc-deepPink' || 'in-active'">
       <Music></Music>
       RINGTONES
     </div>
-    <Close class="close" @click.native="showControl(false)"></Close>
+    <Close class="close"
+      @click.native="showControl(false)"></Close>
     <div class="first-todo-wrap bg-lightPink">
       <div class="top-circle bg-deepPink">
-        <div class="mid-trig-btn bg-deepPink">
-          <PlayArrow></PlayArrow>
+        <div class="mid-trig-btn bg-deepPink" @click="playerOnClick">
+          <PlayArrow v-if="!isCountDown"></PlayArrow>
+          <PauseBtn v-else></PauseBtn>
         </div>
       </div>
-      <div class="time-font">25:00</div>
-      <div class="first-todo-ele">THE FIRST THING TO DO TODAY</div>
+      <div class="time-font">{{currentCountDownTime|timeF}}</div>
+      <div class="first-todo-ele">{{currentTODO.text}}</div>
     </div>
-    <transition name="fade" mode="out-in">
-      <components :is="active"></components>
+    <transition name="fade"
+      mode="out-in">
+      <components :is="category"></components>
     </transition>
   </div>
 </template>
@@ -41,8 +44,11 @@ import TODO from '../components/Todo-list'
 import Analytics from '../components/Analytics'
 import Close from '../components/svg/close'
 import PlayArrow from '../components/svg/play-arrow'
-import { mapActions } from 'vuex'
+import Ringtones from '../components/Ringtones'
+import { mapActions, mapGetters } from 'vuex'
+import PauseBtn from '../components/svg/pause-no-fill'
 export default {
+  props: ['defaultComponent'],
   components: {
     List,
     Music,
@@ -50,15 +56,30 @@ export default {
     TODO,
     Analytics,
     PlayArrow,
-    Close
+    Close,
+    Ringtones,
+    PauseBtn
   },
-  data () {
-    return {
-      active: 'TODO'
-    }
+  computed: {
+    ...mapGetters([
+      'currentCountDownTime',
+      'currentTODO',
+      'isCountDown',
+      'category'
+    ])
   },
   methods: {
-    ...mapActions(['showControl'])
+    ...mapActions([
+      'showControl',
+      'playerOnClick'
+    ])
+  },
+  filters: {
+    timeF (value = 0) {
+      let mins = (Math.floor(value / 60)) + ''
+      let secs = (value % 60) + ''
+      return mins.padStart(2, '0') + ':' + secs.padStart(2, '0')
+    }
   }
 }
 </script>
@@ -74,7 +95,7 @@ export default {
   color rgba(white, 0.2)
   & svg
     fill rgba(white, 0.2)
-[class^="option-"]
+[class^='option-']
   position absolute
   left 48px
   font-size 36px
@@ -83,7 +104,7 @@ export default {
   transition 0.3s
   cursor pointer
   &.in-active:hover
-    filter: drop-shadow(0px 0px 15px rgba(white, 0.7))
+    filter drop-shadow(0px 0px 15px rgba(white, 0.7))
   svg
     size 36px
 .option-todo
@@ -113,8 +134,12 @@ export default {
   display flex
   justify-content center
   align-items center
+  cursor pointer
+  &:hover svg
+    size 80px
   transform translate(-50%, -50%)
   svg
+    transition 0.2s
     fill white
     size 60px
 .time-font

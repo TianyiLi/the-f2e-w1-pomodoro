@@ -1,6 +1,6 @@
 <template>
   <div class="countdownContainer"
-    :class="{active: active, rest: isRest}">
+    :class="{active: isCountDown, rest: isRest}">
     <svg id="svg"
       width="540"
       height="540"
@@ -24,7 +24,7 @@
     </svg>
     <div class="inner-circle"
       @click="playerOnClick">
-      <PlayerButtonFill v-if="!active"
+      <PlayerButtonFill v-if="!isCountDown"
         class="p-btn"></PlayerButtonFill>
       <PausedButtonFill v-else
         class="p-btn"></PausedButtonFill>
@@ -63,7 +63,6 @@ export default {
       arcStrokeWidth: 0,
       arcStrokeDashway: 0,
       counterTimer: -1,
-      active: false,
       timerId: -1
     }
   },
@@ -72,25 +71,14 @@ export default {
       return Math.PI * (this.arcRadius * 2) * (1 - (this.$store.state.currentCountDownTime / this.$store.state.initCountDownTime))
     },
     ...mapGetters([
-      'isRest'
+      'isRest',
+      'isCountDown'
     ])
   },
   methods: {
     ...mapActions([
-      'timeCountDown'
-    ]),
-    playerOnClick () {
-      this.active = !this.active
-      this.$store.commit('countDownToggle', this.active)
-      if (this.active) {
-        this.timerId = setInterval(() => {
-          if (this.active) this.timeCountDown()
-          else clearInterval(this.timerId)
-        }, 1000)
-      } else {
-        clearInterval(this.timerId)
-      }
-    }
+      'playerOnClick'
+    ])
   }
 }
 </script>

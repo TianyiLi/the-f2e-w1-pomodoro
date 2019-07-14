@@ -74,7 +74,8 @@ export default new Vuex.Store({
       }
     ],
     currentTarget: 0,
-    isRest: false
+    isRest: false,
+    timerID: -1
   },
   getters: {
     todoList: state => state.todoList.filter(list => !list.isDone),
@@ -83,7 +84,8 @@ export default new Vuex.Store({
     isRest: state => state.isRest,
     currentCountDownTime: state => state.currentCountDownTime,
     currentTODO: state => state.todoList.find(ele => ele.id === state.currentTarget),
-    isCountDown: state => state.isCountDown
+    isCountDown: state => state.isCountDown,
+    category: state => state.category
   },
   mutations: {
     isFinish (state, i) {
@@ -114,6 +116,9 @@ export default new Vuex.Store({
     },
     countDownToggle (state, v = !state.isCountDown) {
       state.isCountDown = v
+    },
+    setTimerID (state, id) {
+      state.timerID = id
     }
   },
   actions: {
@@ -132,8 +137,17 @@ export default new Vuex.Store({
     resetToggle ({ commit, state }, v) {
       commit('setRest', v instanceof Boolean ? v : !state.isRest)
     },
-    timeCountDown ({ commit }) {
-      commit('countDownTime')
+    playerOnClick ({ commit, state }) {
+      state.isCountDown = !state.isCountDown
+      if (state.isCountDown) {
+        const id = setInterval(() => {
+          if (state.isCountDown) commit('countDownTime')
+          else clearInterval(state.timerID)
+        }, 1000)
+        commit('setTimerID', id)
+      } else {
+        clearInterval(state.timerID)
+      }
     }
   }
 })

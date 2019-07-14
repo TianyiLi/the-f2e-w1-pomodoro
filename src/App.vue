@@ -43,6 +43,7 @@ html, body
   align-items center
   justify-content center
   background rgba(black, 0.5)
+  user-select none
 .bg-deepBlue
   background $deepBlue
 .bg-deepPink

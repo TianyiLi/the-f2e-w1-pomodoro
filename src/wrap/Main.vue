@@ -2,7 +2,8 @@
   <div class="wrap"
     :class="isRest && 'rest' || ''">
     <div class="add-new-mission">
-      <input type="text" required>
+      <input type="text"
+        required>
       <span class="label">ADD A NEW MISSION...</span>
       <svg class="add"
         xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +15,13 @@
           fill="none" /></svg>
     </div>
 
-    <div class="current-todo" :class="isCountDown && 'on-count-down'">THE FIRST THING TO DO TODAY
+    <div class="current-todo"
+      :class="isCountDown && 'on-count-down'">THE FIRST THING TO DO TODAY
       <div class="cost-time">
-        <div class="ball" :class="num <= currentTODO.costTime && 'fill'" v-for="num in currentTODO.costTime + 1" :key="num"></div>
+        <div class="ball"
+          :class="num <= currentTODO.costTime && 'fill'"
+          v-for="num in currentTODO.costTime + 1"
+          :key="num"></div>
       </div>
     </div>
 
@@ -34,8 +39,10 @@
 
     <List class="menu-todo"
       @click.native="toTODO"></List>
-    <InsertChart class="analytics"></InsertChart>
-    <Music class="ringtones"></Music>
+    <InsertChart class="analytics"
+      @click.native="toAnalytics"></InsertChart>
+    <Music class="ringtones"
+      @click.native="toRingtones"></Music>
     <PlayTrigger class="middle-player"
       :pause="true"
       :initSec="30"></PlayTrigger>
