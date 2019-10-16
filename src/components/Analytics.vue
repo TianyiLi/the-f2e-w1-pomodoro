@@ -19,13 +19,13 @@
       </span>
     </div>
     <div class="chart-box">
-      <div class="line1"></div>
-      <div class="line2"></div>
-      <div class="line3"></div>
-      <div class="line4"></div>
-      <div class="line5"></div>
-      <div class="line6"></div>
-      <div class="line7"></div>
+      <div class="line1" :class="onmounting && 'active' || ''"></div>
+      <div class="line2" :class="onmounting && 'active' || ''"></div>
+      <div class="line3" :class="onmounting && 'active' || ''"></div>
+      <div class="line4" :class="onmounting && 'active' || ''"></div>
+      <div class="line5" :class="onmounting && 'active' || ''"></div>
+      <div class="line6" :class="onmounting && 'active' || ''"></div>
+      <div class="line7" :class="onmounting && 'active' || ''"></div>
     </div>
     <div class="verticle-line">
       <span>24</span>
@@ -53,6 +53,21 @@ export default {
   components: {
     KeyboardLeft,
     KeyboardRight
+  },
+  data () {
+    return {
+      onmounting: false
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.onmounting = true
+    })
+  },
+  deactivated () {
+    this.$nextTick(() => {
+      this.onmounting = false
+    })
   }
 }
 </script>
@@ -73,8 +88,7 @@ export default {
     svg
       fill white
       size 24px
-.to-day,
-.week
+.to-day, .week
   position absolute
   color white
   font-size 16px
@@ -117,7 +131,7 @@ export default {
   flex-wrap nowrap
   align-items flex-end
   padding 0 31px
-  [class^="line"]
+  [class^='line']
     width 26px
     background-color white
     &:last-of-type
@@ -148,9 +162,13 @@ export default {
     font-size 16px
     margin-bottom 20px
     text-align left
-random(min,max)
-  return floor((math(0, 'random')*(max - min + 1) + min)*10.125)
-for $num in (1..7)
+random(min, max)
+  return floor((math(0, 'random') * (max - min + 1) + min) * 10.125)
+for $num in (1 .. 7)
   .line{$num}
-    height unit(random(0, 24), 'px')
+    height 0
+    transition height .7s
+    transition-delay .2s
+    &.active
+      height unit(random(0, 24), 'px')
 </style>

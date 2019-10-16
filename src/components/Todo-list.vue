@@ -117,10 +117,16 @@ export default {
       &:last-of-type
         margin-left auto
         margin-right 0
-.done-header
+.done
+  position absolute
   top 498px
+  left 560px
+.done-header
+  top 0
+  left 0
 .done .done-list
-  top 542px
+  top 542px - 498px
+  left 0
   & svg:last-of-type
     margin initial
     margin-right 4px
